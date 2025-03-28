@@ -10,8 +10,8 @@ SHELL:=bash
 
 ##@ Helpers
 help: ## display this help
-	@echo "Docker-Compose Showcase"
-	@echo "======================="
+	@echo "Docker-Compose Streamlit Showcase"
+	@echo "================================="
 	@awk 'BEGIN {FS = ":.*##"; printf "\033[36m\033[0m"} /^[a-zA-Z0-9_%/-]+:.*?##/ { printf "  \033[36m%-25s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 	@printf "\n"
 
