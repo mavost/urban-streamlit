@@ -2,7 +2,7 @@
 # based on
 # https://docs.docker.com/compose/gettingstarted/
 # and some housekeeping
-ARG BASEIMAGE
+ARG BASEIMAGE=python:3.9-slim
 FROM ${BASEIMAGE}
 
 # COPY data /data
