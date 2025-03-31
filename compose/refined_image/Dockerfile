@@ -5,18 +5,6 @@
 ARG BASEIMAGE=python:3.9-slim
 FROM ${BASEIMAGE}
 
-# COPY data /data
-
-# WORKDIR /code
-# RUN apk add --no-cache gcc musl-dev linux-headers
-# COPY requirements.txt requirements.txt
-# RUN pip install -r requirements.txt
-# EXPOSE 5000
-
-#CMD ["flask", "run"]
-
-#FROM python:3.9-slim
-
 # Set working directory
 WORKDIR /app
 
@@ -39,4 +27,4 @@ EXPOSE 8501
 HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health || exit 1
 
 # Run the Streamlit app
-ENTRYPOINT ["streamlit", "run", "code/app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+ENTRYPOINT ["streamlit", "run", "MyApp.py", "--server.port=8501", "--server.address=0.0.0.0"]
