@@ -1,41 +1,39 @@
 # a sample compose file
 version: '3'
 services:
-  alpine:
+  streamlit-app:
     build:
       context: ./compose/refined_image
       args:
        - BASEIMAGE=${FIRST_BASE_IMAGE}
     image: ${FIRST_REFINED_IMAGE_ROOT}:${STACK_VERSION}
-    container_name: ${STACK_NAME:-defstack}_alpine
+    container_name: ${STACK_NAME:-defstack}_streamlit
     ports:
-     - 8080:5000
+      - "8501:8501"
     networks:
      - mydefaultstack
     environment:
-     - EXAMPLE_VAR_VERBOSE=true
-     - FLASK_DEBUG=1
-     - FLASK_APP=app.py
-     - FLASK_RUN_HOST=0.0.0.0
+     - TESTING=true
+     - DUCKDB_PATH=/db/urban_data.duckdb
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.streamlit-app.tls=true"
+      - "traefik.http.routers.streamlit-app.rule=Host(`streamlit.${DOMAIN_NAME}`)"
+      - "traefik.http.services.streamlit-app.loadbalancer.server.port=8501"
     volumes:
-     - ./compose/refined_image/code:/code
-    depends_on:
-     - redis
-  redis:
-    image: "redis:alpine"
-    container_name: ${STACK_NAME:-defstack}_redis
-#    ports:
-#     - 6379:6379
-#    volumes:
-#      - persistent_data:/persistent_data
-    networks:
-     - mydefaultstack
+      - ./compose/refined_image:/app
+      - duckdb_data:/db
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
 volumes:
-  persistent_data:
+  duckdb_data:
     driver: local
 
 networks:
   mydefaultstack:
     name: mydefaultstack
-#    external: true
+    external: true
