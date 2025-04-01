@@ -30,6 +30,17 @@ def load_data():
     con.close()
     return df
 
+def reload_db():
+    con = duckdb.connect(DB_PATH)
+    con.execute("DROP TABLE IF EXISTS cities")  # Drop table if it exists
+    con.execute(f"""
+        CREATE TABLE IF NOT EXISTS cities AS
+        SELECT * FROM read_csv_auto('{DATA_PATH}');
+    """)
+    df = con.execute("SELECT * FROM cities;").fetchdf()
+    con.close()
+    return df
+
 # Check if file exists
 if not os.path.exists(DATA_PATH):
     st.error(f"Data file not found at `{DATA_PATH}`. Please upload or mount it.")
@@ -41,16 +52,6 @@ else:
 
     df = load_data()
 
-    # Load data using DuckDB
-    # con = duckdb.connect(database=':memory:')
-    # con.execute(f"""
-    #     CREATE TABLE urban_data AS 
-    #     SELECT * FROM read_csv_auto('{DATA_PATH}')
-    # """)
-    
-    # # Read as Pandas DataFrame
-    # df = con.execute("SELECT * FROM urban_data").fetchdf()
-
     # Display summary
     st.subheader("📊 Data Preview")
     st.dataframe(df.head(10), use_container_width=True)
@@ -58,6 +59,10 @@ else:
     # Show column stats
     st.subheader("📈 Column Stats")
     st.write(df.describe(include='all'))
+    # Button to flush database
+    if st.button("Reset Table"):
+        reload_db()
+        st.success("Backend database reset successfully (please reload page)!")
 
     # Optional filtering UI
     st.subheader("🔎 Filter Rows")
