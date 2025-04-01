@@ -25,5 +25,8 @@ st.markdown(
     - Use a neural net to [analyze the Udacity Self-driving Car Image
         Dataset](https://github.com/streamlit/demo-self-driving)
     - Explore a [New York City rideshare dataset](https://github.com/streamlit/demo-uber-nyc-pickups)
+    ### Learn more about DuckDB use cases?
+    - Impressive show case using Dutch railway data, [Link](https://duckdb.org/2025/03/28/using-duckdb-in-streamlit.html),
+        [GitHub](https://github.com/duckdb/duckdb-web/tree/main/code_examples/duckdb_streamlit)
 """
 )
