@@ -2,7 +2,7 @@ MAKEFLAGS += --warn-undefined-variables
 .SHELLFLAGS := -eu -o pipefail -c
 
 all: help
-.PHONY: all, help, run-compose, run-clean
+.PHONY: all help run-compose clean
 # https://medium.com/freestoneinfotech/simplifying-docker-compose-operations-using-makefile-26d451456d63
 
 # Use bash for inline if-statements
@@ -19,10 +19,10 @@ help: ## display this help
 stack = 
 ##@ Setup
 run-compose: ## set up stack, vars: stack=[NULL, extended]
-	docker-compose -f docker-compose$(stack).yaml build $(c)
-	docker-compose -f docker-compose$(stack).yaml up -d $(c)
+	docker compose -f docker-compose$(stack).yaml build $(c)
+	docker compose -f docker-compose$(stack).yaml up -d $(c)
 
 stack = 
 ##@ Tear-down
-run-clean: ## clean up stack, vars: stack=[NULL, extended]
-	docker-compose -f docker-compose$(stack).yaml down $(c)
+clean: ## clean up stack, vars: stack=[NULL, extended]
+	docker compose -f docker-compose$(stack).yaml down $(c)
